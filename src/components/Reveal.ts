@@ -1,8 +1,8 @@
-import merge from 'lodash.merge';
+import { defineComponent } from '@vue/runtime-core';
 
-let ANIMATION_OBSERVER;
+let ANIMATION_OBSERVER: IntersectionObserver;
 
-export default {
+export default defineComponent({
   name: 'LeapsReveal',
   functional: true,
   props: {
@@ -36,7 +36,7 @@ export default {
     }
   },
   render (h, ctx) {
-    const data = merge(
+    const data = Object.assign(
       ctx.data,
       {
         style: {
@@ -57,27 +57,27 @@ export default {
     if (children.length === 1 && !ctx.props.tag) {
       const el = children[0];
       const tag = el.tag || ctx.props.tag || 'span';
-      const elData = merge(el.data, data);
+      const elData = Object.assign(el.data, data);
       return h(tag, elData, el.children || el.text)
     }
     return h(ctx.props.tag || 'span', data, children);
   }
-};
+});
 
-export function install (Vue) {
+export function install(Vue) {
   const directive = {
-    bind (el, { value }) {
+    bind (el: HTMLElement, { value }: {value: string}) {
       el.__leapsProps = value;
       observe(el);
-    }, 
-    destroyed (el) {
+    },
+    destroyed (el: HTMLElement) {
       unobserve(el);
     }
-  };  
+  };
   Vue.directive('leaps-observer', directive);
 };
 
-function startAnimating (el) {
+function startAnimating(el: HTMLElement) {
   const { name, animateClass, delay, iteration, duration } = el.__leapsProps;
   el.style.visibility = '';
   el.style.animationDelay = delay;
@@ -96,12 +96,12 @@ function startAnimating (el) {
   el.addEventListener('animationend', onEnd);
 }
 
-function unobserve (el) {
+function unobserve (el: HTMLElement) {
   ANIMATION_OBSERVER.unobserve(el);
 }
 
-function observe (el) {
-  if (!ANIMATION_OBSERVER) { 
+function observe (el: HTMLElement) {
+  if (!ANIMATION_OBSERVER) {
     initObserver();
    }
   ANIMATION_OBSERVER.observe(el);
@@ -110,9 +110,9 @@ function observe (el) {
 function initObserver () {
   ANIMATION_OBSERVER = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-      if(entry.isIntersecting) {
+      if (entry.isIntersecting) {
         startAnimating(entry.target);
       }
     });
   });
-}
+})

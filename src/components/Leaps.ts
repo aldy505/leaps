@@ -1,4 +1,6 @@
-export default {
+import {defineComponent} from '@vue/runtime-core';
+
+export default defineComponent({
   name: 'Leaps',
   props: {
     from: {
@@ -13,32 +15,32 @@ export default {
       },
       type: Object,
     },
-    // spring stiffness, in kg / s^2
+    // Spring stiffness, in kg / s^2
     stiffness: {
       default: 170,
       type: Number,
     },
-    // damping constant, in kg / s
+    // Damping constant, in kg / s
     damping: {
       default: 26,
       type: Number,
     },
-    // spring mass
+    // Spring mass
     mass: {
       default: 1,
       type: Number,
     },
-    // initial velocity
+    // Initial velocity
     velocity: {
       default: 0,
       type: Number,
     },
-    // precision
+    // Precision
     precision: {
       default: 0.1,
       type: Number,
     },
-    // animation direction, forward, reverse, or alternate
+    // Animation direction, forward, reverse, or alternate
     direction: {
       default: 'forward',
       type: String,
@@ -47,7 +49,7 @@ export default {
   data() {
     return {
       looping: '',
-      frameRate: 1 / 60, // how many frame per ms
+      frameRate: 1 / 60, // How many frame per ms
       start: {},
       end: {},
       leaps: {},
@@ -59,9 +61,7 @@ export default {
   },
   computed: {
     isLeapEnd() {
-      return Object.keys(this.velocities).every(key => {
-        return this.velocities[key] === 0;
-      });
+      return Object.keys(this.velocities).every(key => this.velocities[key] === 0);
     },
   },
   watch: {
@@ -72,12 +72,19 @@ export default {
       this.setup();
     },
   },
+  created() {
+    this.setup();
+  },
+  mounted() {
+    window.requestAnimationFrame(this.leap);
+  },
   methods: {
     setup() {
       Object.keys(this.to).forEach(key => {
         if (!this.from[key]) {
           this.$set(this.from, key, 0);
         }
+
         this.$set(this.velocities, key, this.velocity);
         this.$set(this.leaps, key, this.isReverse ? this.to[key] : this.from[key]);
       });
@@ -107,15 +114,9 @@ export default {
       return Math.abs(velocity) < this.precision && Math.abs(distance) < this.precision;
     },
   },
-  created() {
-    this.setup();
-  },
-  mounted() {
-    window.requestAnimationFrame(this.leap);
-  },
   render() {
     return this.$scopedSlots.default({
       leaps: this.leaps,
     });
   },
-};
+});
