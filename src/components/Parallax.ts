@@ -72,11 +72,11 @@ export default defineComponent({
   name: 'LeapsParallax',
   props: {
     from: {
-      default: {},
+      default: () => ({}),
       type: Object,
     },
     to: {
-      default: {},
+      default: () => ({}),
       type: Object,
     },
     viewportRatio: {
@@ -94,9 +94,12 @@ export default defineComponent({
       viewportHeight: 0,
       viewportWidth: 0,
       moved: 0,
-      elRect: null as ElRect|null,
-      unitPerScroll: {},
-      parallax: {},
+      elRect: null as ElRect | null,
+      unitPerScroll: {} as Record<string, unknown>,
+      parallax: {
+        translateY: 0,
+      } as Record<string, number>,
+      denominator: 0,
     };
   },
   mounted() {
@@ -119,7 +122,7 @@ export default defineComponent({
       this.viewportHeight = window.innerHeight;
       this.viewportWidth = window.innerWidth;
       this.denominator
-        = this.viewportRatio * this.viewportHeight
+        = (this.viewportRatio * this.viewportHeight)
         + (this.to.translateY || 0)
         + (this.useElHeight ? this.elRect.height : 0);
       Object.keys(this.to).forEach(key => {
@@ -127,14 +130,18 @@ export default defineComponent({
       });
       this.parallax = {...this.from};
     },
-    valuePerScroll(key: string) {
+    valuePerScroll(key: string): number {
       const from = this.from[key] || 0;
       const to = this.to[key];
       return (to - from) / this.denominator;
     },
-    inViewport() {
+    inViewport(): boolean {
+      if (this.elRect === null) {
+        return false;
+      }
+
       return SCROLLED <= this.elRect.bottom
-             && SCROLLED >= this.elRect.top - this.viewportHeight;
+        && SCROLLED >= this.elRect.top - this.viewportHeight;
     },
     getValue(key: string): number {
       const from = this.from[key] || 0;
@@ -159,6 +166,10 @@ export default defineComponent({
     },
     update() {
       if (this.inViewport()) {
+        if (this.elRect === null) {
+          throw new RangeError('elRect should be not null if it is in viewport');
+        }
+
         this.moved = SCROLLED - this.elRect.top + this.viewportHeight;
         Object.keys(this.to).forEach(key => {
           this.parallax[key] = this.getValue(key);

@@ -5,7 +5,7 @@ import Reveal from './components/Reveal';
 import Timeline from './components/Timeline';
 
 export function install(app: App) {
-  app.component('Leaps', Leaps);
+  app.component('VueLeaps', Leaps);
 }
 
 if (typeof window !== 'undefined' && (window as any).Vue) {

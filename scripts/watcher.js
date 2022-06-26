@@ -1,5 +1,5 @@
-const { paths } = require('./config');
-const { build } = require('./build');
+const {paths} = require('./config');
+const {build} = require('./build');
 const bs = require('browser-sync').create();
 
 bs.init({
@@ -8,9 +8,9 @@ bs.init({
   files: [
     paths.dist, {
       match: paths.src,
-      fn (event, file) {
+      fn(event, file) {
         build('umd');
-      }
-    }
-  ]
+      },
+    },
+  ],
 });

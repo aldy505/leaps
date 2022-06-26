@@ -8,18 +8,18 @@ const version = process.env.VERSION || require('../package.json').version;
 
 const paths = {
   src: path.join(__dirname, '../src'),
-  dist: path.join(__dirname, '../dist')
-}
+  dist: path.join(__dirname, '../dist'),
+};
 const builds = {
   input: {
     input: path.join(paths.src, 'index.js'),
     plugins: [
-      replace({ __VERSION__: version }),
+      replace({__VERSION__: version}),
       vue(),
       babel(),
       resolve(),
-      commonjs()
-    ]
+      commonjs(),
+    ],
   },
   output: {
     name: 'leaps',
@@ -30,18 +30,18 @@ const builds = {
     * (c) ${new Date().getFullYear()}
       * @license MIT
       */`,
-      outputFolder: path.join(__dirname, '../dist'),
-  }
+    outputFolder: path.join(__dirname, '../dist'),
+  },
 };
 
 const uglifyOptions = {
   toplevel: true,
   compress: true,
-  mangle: true
-}
+  mangle: true,
+};
 
 module.exports = {
   paths,
   builds,
-  uglifyOptions
+  uglifyOptions,
 };

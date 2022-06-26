@@ -1,4 +1,7 @@
+import mitt from 'mitt';
 import {defineComponent} from 'vue';
+
+const emitter = mitt();
 
 export default defineComponent({
   name: 'LeapsTimeline',
@@ -37,7 +40,7 @@ export default defineComponent({
   },
   created() {
     this.setup();
-    this.$on('next', this.nextFrame);
+    emitter.on('next', this.nextFrame);
   },
   methods: {
     setup() {

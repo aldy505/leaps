@@ -4,7 +4,9 @@
     "outDir": "lib",
     "baseUrl": "./",
     "paths": {
-      "vue-scroll-picker": ["./src"]
+      "leaps": [
+        "./src"
+      ]
     },
     "module": "commonjs",
     "moduleResolution": "node",

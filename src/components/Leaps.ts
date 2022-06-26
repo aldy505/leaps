@@ -1,4 +1,4 @@
-import {defineComponent} from '@vue/runtime-core';
+import {defineComponent} from 'vue';
 
 export default defineComponent({
   name: 'Leaps',
@@ -50,11 +50,11 @@ export default defineComponent({
     return {
       looping: '',
       frameRate: 1 / 60, // How many frame per ms
-      start: {},
-      end: {},
-      leaps: {},
+      start: {} as Record<string, unknown>,
+      end: {} as Record<string, unknown>,
+      leaps: {} as Record<string, number>,
       AnimationRequestID: 0,
-      velocities: {},
+      velocities: {} as Record<string, number>,
       isReverse: (() => this.direction === 'reverse')(),
       isAlternate: (() => this.direction === 'alternate')(),
     };
@@ -82,11 +82,12 @@ export default defineComponent({
     setup() {
       Object.keys(this.to).forEach(key => {
         if (!this.from[key]) {
-          this.$set(this.from, key, 0);
+          // FIXME: find a way to not mutate a prop
+          this.from[key] = 0;
         }
 
-        this.$set(this.velocities, key, this.velocity);
-        this.$set(this.leaps, key, this.isReverse ? this.to[key] : this.from[key]);
+        this.velocities[key] = this.velocity;
+        this.leaps[key] = this.isReverse ? this.to[key] : this.from[key];
       });
     },
     leap() {
@@ -110,7 +111,7 @@ export default defineComponent({
         this.AnimationRequestID = window.requestAnimationFrame(this.leap);
       }
     },
-    isDumped(velocity, distance) {
+    isDumped(velocity: number, distance: number): boolean {
       return Math.abs(velocity) < this.precision && Math.abs(distance) < this.precision;
     },
   },

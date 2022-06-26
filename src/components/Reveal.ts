@@ -1,4 +1,4 @@
-import { defineComponent } from '@vue/runtime-core';
+import { defineComponent } from 'vue';
 
 let ANIMATION_OBSERVER: IntersectionObserver;
 
@@ -35,7 +35,7 @@ export default defineComponent({
       default: null
     }
   },
-  render (h, ctx) {
+  render(h, ctx) {
     const data = Object.assign(
       ctx.data,
       {
@@ -66,11 +66,11 @@ export default defineComponent({
 
 export function install(Vue) {
   const directive = {
-    bind (el: HTMLElement, { value }: {value: string}) {
+    bind(el: HTMLElement, { value }: { value: string }) {
       el.__leapsProps = value;
       observe(el);
     },
-    destroyed (el: HTMLElement) {
+    destroyed(el: HTMLElement) {
       unobserve(el);
     }
   };
@@ -96,18 +96,18 @@ function startAnimating(el: HTMLElement) {
   el.addEventListener('animationend', onEnd);
 }
 
-function unobserve (el: HTMLElement) {
+function unobserve(el: HTMLElement) {
   ANIMATION_OBSERVER.unobserve(el);
 }
 
-function observe (el: HTMLElement) {
+function observe(el: HTMLElement) {
   if (!ANIMATION_OBSERVER) {
     initObserver();
-   }
+  }
   ANIMATION_OBSERVER.observe(el);
 }
 
-function initObserver () {
+function initObserver() {
   ANIMATION_OBSERVER = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {

@@ -6,7 +6,7 @@
   "unpkg": "dist/leaps.js",
   "main": "dist/leaps.js",
   "scripts": {
-    "lint": "eslint ./src --fix",
+    "lint": " npx eslint --fix --ignore-path .gitignore --ext .js,.ts .",
     "demo": "webpack-dev-server --hot --inline --config ./demo/webpack.config.js",
     "dev": "node scripts/watcher",
     "docs:dev": "vuepress dev docs",
@@ -19,29 +19,16 @@
     "build:example": "vite build example && cp example/CNAME example-dist/"
   },
   "devDependencies": {
-    "@babel/core": "^7.1.2",
-    "@babel/plugin-proposal-object-rest-spread": "^7.2.0",
-    "@typescript-eslint/eslint-plugin": "^5.6.0",
-    "@typescript-eslint/parser": "^5.6.0",
-    "@vitejs/plugin-vue": "^1.10.2",
-    "@vue/compiler-sfc": "^3.2.24",
-    "browser-sync": "^2.26.3",
-    "chalk": "^2.4.2",
-    "chart.js": "^2.7.3",
-    "eslint": "^8.4.1",
-    "eslint-config-xo-space": "^0.30.0",
-    "eslint-plugin-vue": "^8.2.0",
-    "filesize": "^4.0.0",
-    "fs": "^0.0.1-security",
-    "gzip-size": "^5.0.0",
-    "mkdirp": "^0.5.1",
-    "path": "^0.12.7",
-    "style-loader": "^0.23.1",
-    "typescript": "^4.5.2",
-    "util": "^0.11.1",
-    "vite": "^2.7.1",
-    "vue": "^3.2.24",
-    "vuepress": "^1.0.0-alpha.32"
+    "@typescript-eslint/eslint-plugin": "^5.29.0",
+    "@typescript-eslint/parser": "^5.29.0",
+    "@vitejs/plugin-vue": "^2.3.3",
+    "@vue/compiler-sfc": "^3.2.37",
+    "eslint": "^8.18.0",
+    "eslint-config-xo-space": "^0.33.0",
+    "eslint-plugin-vue": "^9.1.1",
+    "typescript": "^4.7.4",
+    "vite": "^2.9.12",
+    "vue": "^3.2.37"
   },
   "license": "MIT",
   "keywords": [],
@@ -52,6 +39,6 @@
     }
   ],
   "dependencies": {
-    "lodash.merge": "^4.6.1"
+    "mitt": "^3.0.0"
   }
 }
